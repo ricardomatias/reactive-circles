@@ -22,6 +22,8 @@ var agents = [];
 
 var SAMPLE_AMOUNT = 128;
 
+var PRESET_1 = 'birds';
+
 var presets = new PresetsManager();
 
 function setup() {
@@ -39,7 +41,7 @@ function setup() {
 	fft.setInput(mic);
 
 	// PRESETS
-	presets.register('one-group', {
+	presets.register(PRESET_1, {
 		agentsNumber: SAMPLE_AMOUNT * 0.5,
 		speed: 1,
 		friction: 0.9,
@@ -49,24 +51,24 @@ function setup() {
 		maxForce: 5
 	});
 
-	presets.register('energy-layers', {
-		agentsNumber: SAMPLE_AMOUNT,
-		speed: 1,
-		friction: 0.8,
-		spectrumWeight: 0.1,
-		minForce: 1,
-		maxForce: 10
-	});
+	// presets.register('energy-layers', {
+	// 	agentsNumber: SAMPLE_AMOUNT,
+	// 	speed: 1,
+	// 	friction: 0.8,
+	// 	spectrumWeight: 0.1,
+	// 	minForce: 1,
+	// 	maxForce: 10
+	// });
 
 	presets.register('circles-one', {
 		agentsNumber: SAMPLE_AMOUNT / 2,
-		spectrumWeight: 0.6
+		spectrumWeight: 0.8
 	});
 
-	presets.register('circles-two', {
-		agentsNumber: SAMPLE_AMOUNT,
-		spectrumWeight: 0.5
-	});
+	// presets.register('circles-two', {
+	// 	agentsNumber: SAMPLE_AMOUNT,
+	// 	spectrumWeight: 0.5
+	// });
 
 	// DEFAULTS
 	function setupDefaults(defaults) {
@@ -79,7 +81,7 @@ function setup() {
 		}
 	}
 
-	presets.setup('one-group', function(defaults) {
+	presets.setup(PRESET_1, function(defaults) {
 		agents = [];
 
 		setupDefaults(defaults);
@@ -97,7 +99,7 @@ function setup() {
 		angle = TWO_PI / defaults.agentsNumber;
 	});
 
-	presets.select('one-group');
+	presets.select(PRESET_1);
 
 
 	setNewColorScheme();
@@ -158,7 +160,7 @@ function draw() {
 		}
 	});
 
-	presets.draw('one-group', function(defaults) {
+	presets.draw(PRESET_1, function(defaults) {
 		var micLevel = mic.getLevel(),
 		energy = map(micLevel, 0, defaults.micLevelMax, 0, 255);
 
@@ -168,11 +170,11 @@ function draw() {
 	});
 
 	presets.draw('circles-one', function(defaults) {
-		var energyTypes = [ 'bass', 'lowMid', 'mid', 'highMid', 'treble' ];
+		var energyTypes = [ 'bass', 'mid', 'highMid', 'treble' ];
 
 		for (var j = 32; j < 96; j++) {
 			for (var i = 0; i < 32; i++) {
-				drawElement(j, fft.getEnergy(energyTypes[i % 5]), spectrum[j], defaults.spectrumWeight, 20 * i);
+				drawElement(j, fft.getEnergy(energyTypes[i % 4]), spectrum[j], defaults.spectrumWeight, 30 * i);
 			}
 		}
 	});
@@ -205,17 +207,17 @@ function setNewColorScheme() {
 
 function drawElement(idx, energy, spectrum, spectrumWeight, distance) {
 	var agent = agents[idx],
-	halfWidth = windowWidth / 2,
-	halfHeight = windowHeight / 2,
-	center = new Vector(halfWidth, halfHeight),
-	offset, x, y;
+			halfWidth = windowWidth / 2,
+			halfHeight = windowHeight / 2,
+			center = new Vector(halfWidth, halfHeight),
+			offset, x, y;
 
 	offset = map(energy + spectrumWeight * spectrum, 0, 255 + spectrumWeight * 255, 0, distance);
 
 	x = halfWidth + offset * cos(angle * idx);
 	y = halfHeight + offset * sin(angle * idx);
 
-	presets.draw([ 'one-group', 'energy-layers' ], function(defaults) {
+	presets.draw([ PRESET_1, 'energy-layers' ], function(defaults) {
 		var distCenter = agent.distanceTo(center);
 
 		var size = map(distCenter, 0, distance, 5, distance / 5);
@@ -229,11 +231,11 @@ function drawElement(idx, energy, spectrum, spectrumWeight, distance) {
 
 	presets.draw([ 'circles-one', 'circles-two' ], function() {
 		var dx = (halfWidth) - x,
-		dy = (halfHeight) - y;
+				dy = (halfHeight) - y;
 
 		var distCenter = sqrt(dx * dx + dy * dy);
 
-		var size = map(distCenter, 0, distance, 5, distance / 8);
+		var size = map(distCenter, 0, distance, 1, distance / 8);
 
 		ellipse(x, y, size);
 	});
