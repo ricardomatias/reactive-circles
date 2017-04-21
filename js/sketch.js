@@ -43,7 +43,7 @@ function setup() {
 	// PRESETS
 	presets.register(PRESET_1, {
 		agentsNumber: SAMPLE_AMOUNT * 0.5,
-		speed: 1,
+		speed: 100,
 		friction: 0.9,
 		micLevelMax: 0.35,
 		spectrumWeight: 0.05,
@@ -75,7 +75,7 @@ function setup() {
 		angle = TWO_PI / defaults.agentsNumber;
 
 		for (idx = 0; idx < defaults.agentsNumber; idx++) {
-			agent = new Agent(windowWidth / 2, windowHeight / 2, defaults.speed, angle * idx, defaults.friction);
+			agent = new Agent(windowWidth / 2, windowHeight / 2, defaults.speed, angle * idx, { friction: defaults.friction });
 
 			agents.push(agent);
 		}
@@ -209,7 +209,7 @@ function drawElement(idx, energy, spectrum, spectrumWeight, distance) {
 	var agent = agents[idx],
 			halfWidth = windowWidth / 2,
 			halfHeight = windowHeight / 2,
-			center = new Vector(halfWidth, halfHeight),
+			center = { x: halfWidth, y: halfHeight },
 			offset, x, y;
 
 	offset = map(energy + spectrumWeight * spectrum, 0, 255 + spectrumWeight * 255, 0, distance);
@@ -218,7 +218,7 @@ function drawElement(idx, energy, spectrum, spectrumWeight, distance) {
 	y = halfHeight + offset * sin(angle * idx);
 
 	presets.draw([ PRESET_1, 'energy-layers' ], function(defaults) {
-		var distCenter = agent.distanceTo(center);
+		var distCenter = agent.getSpeed(center);
 
 		var size = map(distCenter, 0, distance, 5, distance / 5);
 
@@ -226,7 +226,7 @@ function drawElement(idx, energy, spectrum, spectrumWeight, distance) {
 
 		agent.update();
 
-		ellipse(agent.getX(), agent.getY(), size);
+		ellipse(agent.x, agent.y, size);
 	});
 
 	presets.draw([ 'circles-one', 'circles-two' ], function() {
