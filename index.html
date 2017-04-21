@@ -6,52 +6,43 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400" rel="stylesheet">
-
-	<style>
-		* {
-			font-family: 'Roboto Mono', Menlo, Lato, monospace;
-		}
-
-		body {
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-		}
-
-		canvas {
-			margin: auto;
-		}
-
-		.github-link {
-		  position: fixed;
-		  bottom: 20px;
-		  right: 20px;
-		  user-select: none !important;
-		}
-
-		.website-link {
-			color: white;
-		  position: absolute;
-		  bottom: 20px;
-		  left: 20px;
-		  text-decoration: none;
-			letter-spacing: 1px;
-			font-size: 14px;
-		}
-	</style>
+	<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+	<button type="button" name="shortcuts" class="btn-shortcuts" onclick="toggleOverlay()">?</button>
+
+	<div class="overlay-container">
+		<div class="overlay hidden">
+			<h3>shortcuts</h3>
+			<div class="inner-overlay">
+				<ul>
+					<li><code>w</code></li>
+					<li><code>s</code></li>
+					<li><code>space</code></li>
+					<li><code>enter</code></li>
+				</ul>
+				<ul>
+					<li>previous preset</li>
+					<li>next preset</li>
+					<li>change color scheme</li>
+					<li>take a screenshot</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
 	<a href="http://ricardomatias.net" class="website-link">ricardomatias.net</a>
 
 	<a class="github-link" href="https://github.com/ricardomatias/reactive-circles" target="_blank">
-		<img src="github-link.png" alt="GitHub Logo">
+		<img src="assets/github-link.png" alt="GitHub Logo">
 	</a>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/p5.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/addons/p5.sound.min.js"></script>
-	<script src="presets-manager.js"></script>
-	<script src="vector.js"></script>
-	<script src="agent.js"></script>
-	<script src="sketch.js"></script>
+	<script src="js/infrastructure.js"></script>
+	<script src="js/presets-manager.js"></script>
+	<script src="js/vector.js"></script>
+	<script src="js/agent.js"></script>
+	<script src="js/sketch.js"></script>
 </body>
 </html>

@@ -28,8 +28,7 @@ function setup() {
 	var idx = 0,
 	agent;
 
-	createCanvas(windowWidth, windowWidth);
-
+	createCanvas(windowWidth, windowHeight);
 	// SETUP MIC
 	mic = new p5.AudioIn();
 	mic.start();
@@ -40,9 +39,7 @@ function setup() {
 	fft.setInput(mic);
 
 	// PRESETS
-	presets.select('circles-one');
-
-	presets.defaults('one-group', {
+	presets.register('one-group', {
 		agentsNumber: SAMPLE_AMOUNT * 0.5,
 		speed: 1,
 		friction: 0.9,
@@ -52,7 +49,7 @@ function setup() {
 		maxForce: 5
 	});
 
-	presets.defaults('energy-layers', {
+	presets.register('energy-layers', {
 		agentsNumber: SAMPLE_AMOUNT,
 		speed: 1,
 		friction: 0.8,
@@ -61,12 +58,12 @@ function setup() {
 		maxForce: 10
 	});
 
-	presets.defaults('circles-one', {
+	presets.register('circles-one', {
 		agentsNumber: SAMPLE_AMOUNT / 2,
 		spectrumWeight: 0.6
 	});
 
-	presets.defaults('circles-two', {
+	presets.register('circles-two', {
 		agentsNumber: SAMPLE_AMOUNT,
 		spectrumWeight: 0.5
 	});
@@ -82,22 +79,64 @@ function setup() {
 		}
 	}
 
-	presets.run('one-group', function(defaults) {
+	presets.setup('one-group', function(defaults) {
+		agents = [];
+
 		setupDefaults(defaults);
 	});
 
-	presets.run('energy-layers', function(defaults) {
+	presets.setup('energy-layers', function(defaults) {
+		agents = [];
+
 		for (var i = 0; i < 5; i++) {
 			setupDefaults(defaults);
 		}
 	});
 
-	presets.run([ 'circles-one', 'circles-two' ], function(defaults) {
+	presets.setup([ 'circles-one', 'circles-two' ], function(defaults) {
 		angle = TWO_PI / defaults.agentsNumber;
 	});
 
+	presets.select('one-group');
+
 
 	setNewColorScheme();
+
+	// SHORTCUTS
+	registerShortcuts([{
+			key: 'w',
+			action: function() {
+				redraw();
+
+				presets.selectPrevious();
+			}
+		},
+		{
+			key: 's',
+			action: function() {
+				redraw();
+
+				presets.selectNext();
+			}
+		},
+		{
+			key: 'h',
+			action: function() {
+				toggleHide();
+			}
+		},
+		{
+			key: 'Space',
+			action: function() {
+				setNewColorScheme();
+			}
+		},
+		{
+			key: 'Enter',
+			action: function() {
+				takeScreenshot(presets.getActiveName());
+			}
+	}]);
 }
 
 function draw() {
@@ -107,7 +146,7 @@ function draw() {
 	background(backgroundColor);
 	fill(fillColor);
 
-	presets.run('energy-layers', function(defaults) {
+	presets.draw('energy-layers', function(defaults) {
 		var energyTypes = [ 'bass', 'lowMid', 'mid', 'highMid', 'treble' ];
 
 		for (var i = 1; i <= 5; i++) {
@@ -119,7 +158,7 @@ function draw() {
 		}
 	});
 
-	presets.run('one-group', function(defaults) {
+	presets.draw('one-group', function(defaults) {
 		var micLevel = mic.getLevel(),
 		energy = map(micLevel, 0, defaults.micLevelMax, 0, 255);
 
@@ -128,7 +167,7 @@ function draw() {
 		}
 	});
 
-	presets.run('circles-one', function(defaults) {
+	presets.draw('circles-one', function(defaults) {
 		var energyTypes = [ 'bass', 'lowMid', 'mid', 'highMid', 'treble' ];
 
 		for (var j = 32; j < 96; j++) {
@@ -138,7 +177,7 @@ function draw() {
 		}
 	});
 
-	presets.run('circles-two', function(defaults) {
+	presets.draw('circles-two', function(defaults) {
 		var energyTypes = [ 'bass', 'lowMid', 'mid', 'highMid', 'treble' ];
 
 		for (var j = 0; j < 12; j++) {
@@ -147,10 +186,6 @@ function draw() {
 			}
 		}
 	});
-}
-
-function mouseClicked() {
-	setNewColorScheme();
 }
 
 function windowResized() {
@@ -180,7 +215,7 @@ function drawElement(idx, energy, spectrum, spectrumWeight, distance) {
 	x = halfWidth + offset * cos(angle * idx);
 	y = halfHeight + offset * sin(angle * idx);
 
-	presets.run([ 'one-group', 'energy-layers' ], function(defaults) {
+	presets.draw([ 'one-group', 'energy-layers' ], function(defaults) {
 		var distCenter = agent.distanceTo(center);
 
 		var size = map(distCenter, 0, distance, 5, distance / 5);
@@ -192,7 +227,7 @@ function drawElement(idx, energy, spectrum, spectrumWeight, distance) {
 		ellipse(agent.getX(), agent.getY(), size);
 	});
 
-	presets.run([ 'circles-one', 'circles-two' ], function() {
+	presets.draw([ 'circles-one', 'circles-two' ], function() {
 		var dx = (halfWidth) - x,
 		dy = (halfHeight) - y;
 

@@ -1,0 +1,88 @@
+* {
+  font-family: 'Roboto Mono', Menlo, Lato, monospace;
+  box-sizing: border-box;
+  user-select: none !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+canvas {
+  margin: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.github-link {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.github-link img {
+  width: 20px;
+}
+
+.website-link {
+  color: white;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  text-decoration: none;
+  letter-spacing: 1.5px;
+  font-size: 10px;
+}
+
+.btn-shortcuts {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.btn-shortcuts:focus {
+  outline: none;
+}
+
+.overlay-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  font-size: 11px;
+}
+
+.overlay {
+  color: white;
+}
+
+.overlay ul {
+  list-style: none;
+  margin: 0;
+  margin-right: 20px;
+  padding: 0;
+}
+
+.overlay h3 {
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.inner-overlay {
+  display: flex;
+}
