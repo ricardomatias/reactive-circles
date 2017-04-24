@@ -19,9 +19,10 @@ canvas {
 }
 
 .github-link {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+	position: fixed;
+	bottom: 3px;
+	right: 5px;
+	user-select: none !important;
 }
 
 .github-link img {
@@ -29,11 +30,11 @@ canvas {
 }
 
 .website-link {
-  color: white;
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  text-decoration: none;
+	color: white;
+	position: fixed;
+	bottom: 5px;
+	left: 5px;
+	text-decoration: none;
   letter-spacing: 1.5px;
   font-size: 10px;
 }
@@ -85,4 +86,10 @@ canvas {
 
 .inner-overlay {
   display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .btn-shortcuts {
+    display: none;
+  }
 }
