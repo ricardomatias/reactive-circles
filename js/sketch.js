@@ -40,16 +40,28 @@ function setup() {
 
 	fft.setInput(mic);
 
-	// PRESETS
-	presets.register(PRESET_1, {
+
+	var properties = {
 		agentsNumber: SAMPLE_AMOUNT * 0.5,
 		speed: 100,
 		friction: 0.9,
-		micLevelMax: 0.35,
-		spectrumWeight: 0.05,
-		minForce: 2,
-		maxForce: 5
-	});
+		micLevelMax: 0.3,
+		spectrumWeight: 0.15,
+		distance: 450,
+		minForce: 0.5,
+		maxForce: 15
+	};
+
+	// var gui = new dat.GUI();
+	//
+  // gui.add(properties, 'micLevelMax', 0.1, 0.5);
+  // gui.add(properties, 'spectrumWeight', 0.0, 1.0);
+  // gui.add(properties, 'distance', 0, 1000);
+  // gui.add(properties, 'minForce', 0.01, 7.0);
+  // gui.add(properties, 'maxForce', 0.1, 40);
+
+	// PRESETS
+	presets.register(PRESET_1, properties);
 
 	// presets.register('energy-layers', {
 	// 	agentsNumber: SAMPLE_AMOUNT,
@@ -148,6 +160,24 @@ function draw() {
 	background(backgroundColor);
 	fill(fillColor);
 
+	presets.draw(PRESET_1, function(defaults) {
+		var micLevel = mic.getLevel(),
+				energy = map(micLevel, 0, defaults.micLevelMax, 0, 255),
+				spectr;
+
+		for (var idx = 16; idx < 80; idx++) {
+			// var spectr = spectrum[Math.floor((Math.random() * SAMPLE_AMOUNT))];
+			if (idx % 2 === 0) {
+				spectr = spectrum[idx];
+			} else {
+				spectr = spectrum[SAMPLE_AMOUNT - idx];
+			}
+
+
+			drawElement(idx - 16, energy, spectr, defaults.spectrumWeight, defaults.distance);
+		}
+	});
+
 	presets.draw('energy-layers', function(defaults) {
 		var energyTypes = [ 'bass', 'lowMid', 'mid', 'highMid', 'treble' ];
 
@@ -157,15 +187,6 @@ function draw() {
 			for (var idx = 0; idx < SAMPLE_AMOUNT; idx++) {
 				drawElement(idx, energy, spectrum[idx], defaults.spectrumWeight, i * 300);
 			}
-		}
-	});
-
-	presets.draw(PRESET_1, function(defaults) {
-		var micLevel = mic.getLevel(),
-		energy = map(micLevel, 0, defaults.micLevelMax, 0, 255);
-
-		for (var idx = 16; idx < 80; idx++) {
-			drawElement(idx - 16, energy, spectrum[idx - 16], defaults.spectrumWeight, 400);
 		}
 	});
 
@@ -196,7 +217,7 @@ function windowResized() {
 
 function setNewColorScheme() {
 	backgroundColor = toRgb(colorsPalette[paletteIndex][0], 60);
-	fillColor = toRgb(colorsPalette[paletteIndex][1], 80);
+	fillColor = toRgb(colorsPalette[paletteIndex][1], 90);
 
 	paletteIndex++;
 
