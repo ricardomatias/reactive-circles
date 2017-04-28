@@ -21,8 +21,8 @@ canvas {
 .github-link {
 	position: fixed;
 	bottom: 3px;
-	right: 5px;
-	user-select: none !important;
+	right: 3px;
+  padding: 7px;
 }
 
 .github-link img {
@@ -32,8 +32,8 @@ canvas {
 .website-link {
 	color: white;
 	position: fixed;
-	bottom: 5px;
-	left: 5px;
+	bottom: 16px;
+	left: 10px;
 	text-decoration: none;
   letter-spacing: 1.5px;
   font-size: 10px;
@@ -41,8 +41,8 @@ canvas {
 
 .btn-shortcuts {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 10px;
+  right: 10px;
   width: 20px;
   height: 20px;
   border-radius: 50%;

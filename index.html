@@ -44,5 +44,18 @@
 	<script src="js/presets-manager.js"></script>
 	<script src="js/agent.js"></script>
 	<script src="js/sketch.js"></script>
+	<script type="text/javascript">
+		(function() {
+			window.addEventListener('touchstart', function(evt) {
+				if (evt.target && evt.target.href) {
+					evt.preventDefault();
+
+					evt.target.target = '_self';
+
+					evt.target.click();
+				}
+			});
+		})();
+	</script>
 </body>
 </html>
